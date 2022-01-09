@@ -25,4 +25,8 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryDbInterface\LibraryDbInterface.csproj" />
+  </ItemGroup>
+
 </Project>
