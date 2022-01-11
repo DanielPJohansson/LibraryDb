@@ -26,20 +26,21 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Authors
         [HttpGet]
-        public async Task<IEnumerable<Author>> GetAuthors()
-        {
-            
-            return await _dataAccess.GetAuthors();
-
-        }
-
         //public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
         //{
-        //    return await _context.Authors.ToListAsync();
+        //    List<Author> authors = (List<Author>)await _dataAccess.GetAuthors();
+        //    return authors;
+
         //}
 
-            //// GET: api/Authors/5
-            [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        {
+            var authors = await _context.Authors.ToListAsync();
+            return authors;
+        }
+
+        //// GET: api/Authors/5
+        [HttpGet("{id}")]
         public async Task<ActionResult<Author>> GetAuthor(int id)
         {
             var author = await _context.Authors.FindAsync(id);
@@ -70,7 +71,7 @@ namespace LibraryDbWebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAuthor(int id, Author author)
         {
-            if (id != author.Id)
+            if (id != author.AuthorId)
             {
                 return BadRequest();
             }
@@ -104,7 +105,7 @@ namespace LibraryDbWebApi.Controllers
             _context.Authors.Add(author);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAuthor", new { id = author.Id }, author);
+            return CreatedAtAction("GetAuthor", new { id = author.AuthorId }, author);
         }
 
         // DELETE: api/Authors/5
@@ -125,7 +126,7 @@ namespace LibraryDbWebApi.Controllers
 
         private bool AuthorExists(int id)
         {
-            return _context.Authors.Any(e => e.Id == id);
+            return _context.Authors.Any(e => e.AuthorId == id);
         }
     }
 }

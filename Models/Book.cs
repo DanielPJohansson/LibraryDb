@@ -6,7 +6,7 @@ namespace LibraryDbWebApi.Models
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int BookId { get; set; }
         [Required]
         [StringLength(50)]
         public string Title { get; set; }
@@ -18,7 +18,6 @@ namespace LibraryDbWebApi.Models
         [Required]
         public bool IsBorrowed { get; set; }
         public byte? ReviewScore { get; set; }
-        [Required]
         public ICollection<Author> Authors { get; set; } = new List<Author>();
     }
 }

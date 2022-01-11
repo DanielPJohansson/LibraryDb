@@ -48,7 +48,7 @@ namespace LibraryDbWebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
-            if (id != customer.Id)
+            if (id != customer.CustomerId)
             {
                 return BadRequest();
             }
@@ -82,7 +82,7 @@ namespace LibraryDbWebApi.Controllers
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
         // DELETE: api/Customers/5
@@ -103,7 +103,7 @@ namespace LibraryDbWebApi.Controllers
 
         private bool CustomerExists(int id)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _context.Customers.Any(e => e.CustomerId == id);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace LibraryDbWebApi.Models
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int AuthorId { get; set; }
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }

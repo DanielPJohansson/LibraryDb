@@ -6,7 +6,7 @@ namespace LibraryDbWebApi
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
         [Required]
         public int LoanCardNumber { get; set; } = new Random().Next(1, 1000);
         [Required]

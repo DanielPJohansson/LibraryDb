@@ -33,7 +33,7 @@ namespace LibraryDbWebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Books.Include(b => b.Authors).FirstOrDefaultAsync(b => b.Id == id);
+            var book = await _context.Books.Include(b => b.Authors).FirstOrDefaultAsync(b => b.BookId == id);
 
             if (book == null)
             {
@@ -82,7 +82,7 @@ namespace LibraryDbWebApi.Controllers
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBook", new { id = book.Id }, book);
+            return CreatedAtAction("GetBook", new { id = book.BookId }, book);
         }
         //public async Task<ActionResult<Book>> PostBook(string title, string isbn, int publicationYear, int[] authorIds)
         //{
@@ -123,7 +123,7 @@ namespace LibraryDbWebApi.Controllers
 
         private bool BookExists(int id)
         {
-            return _context.Books.Any(e => e.Id == id);
+            return _context.Books.Any(e => e.BookId == id);
         }
     }
 }

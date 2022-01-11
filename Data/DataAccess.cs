@@ -12,15 +12,17 @@ namespace LibraryDbWebApi.Data
             LibraryDb = libraryDb;
         }
 
-        public void RecreateDatabase()
+        public async Task RecreateDatabase()
         {
             LibraryDb.Database.EnsureDeleted();
             LibraryDb.Database.EnsureCreated();
+
+
         }
 
         public async Task<IEnumerable<Author>> GetAuthors()
         {
-            IEnumerable<Author> authors = await LibraryDb.Authors.ToListAsync();
+            var authors = await LibraryDb.Authors.ToListAsync();
             return authors;
         }
     }
