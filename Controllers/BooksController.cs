@@ -1,13 +1,4 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LibraryDbWebApi.Data;
-using LibraryDbWebApi.Models;
 
 namespace LibraryDbWebApi.Controllers
 {
@@ -24,16 +15,52 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<GetBookDTO>>> GetBooks()
         {
-            return await _context.Books.Include(b=>b.Authors).ToListAsync();
+            var books = await _context.Books.Include(b => b.Authors)
+                .Select(b => new GetBookDTO()
+                {
+                    BookId = b.BookId,
+                    Title = b.Title,
+                    Isbn = b.Isbn,
+                    PublicationYear = b.PublicationYear,
+                    ReviewScore = b.ReviewScore,
+                    IsBorrowed = b.IsBorrowed,
+                    Authors = b.Authors.Select(a => 
+                    new GetAuthorDTO() 
+                    { 
+                        AuthorId = a.AuthorId, 
+                        FirstName = a.FirstName, 
+                        LastName = a.LastName 
+                    })
+                    .ToList()
+                })
+                .ToListAsync();
+
+            return books;
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(int id)
+        public async Task<ActionResult<GetBookDTO>> GetBook(int id)
         {
-            var book = await _context.Books.Include(b => b.Authors).FirstOrDefaultAsync(b => b.BookId == id);
+            var book = await _context.Books.Include(b => b.Authors).Select(b => new GetBookDTO()
+            {
+                BookId = b.BookId,
+                Title = b.Title,
+                Isbn = b.Isbn,
+                PublicationYear = b.PublicationYear,
+                ReviewScore = b.ReviewScore,
+                IsBorrowed = b.IsBorrowed,
+                Authors = b.Authors.Select(a =>
+                new GetAuthorDTO()
+                {
+                    AuthorId = a.AuthorId,
+                    FirstName = a.FirstName,
+                    LastName = a.LastName
+                })
+                    .ToList()
+            }).FirstOrDefaultAsync(b => b.BookId == id);
 
             if (book == null)
             {
@@ -45,65 +72,57 @@ namespace LibraryDbWebApi.Controllers
 
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutBook(int id, Book book)
-        //{
-        //    if (id != book.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutBook(int id, Book book)
+        {
+            if (id != book.BookId)
+            {
+                return BadRequest();
+            }
 
-        //    _context.Entry(book).State = EntityState.Modified;
+            _context.Entry(book).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!BookExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BookExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Book>> AddBook(Book book)
+        public async Task<ActionResult<Book>> PostBook(PostBookDTO bookDTO)
         {
+            Book book = new() { Title = bookDTO.Title, Isbn = bookDTO.Isbn, PublicationYear = bookDTO.PublicationYear };
+
+            foreach (int id in bookDTO.AuthorIds)
+            {
+                var author = await _context.Authors.FindAsync(id);
+                if (author == null)
+                {
+                    return NotFound();
+                }
+                book.Authors.Add(author);
+            }
+
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBook", new { id = book.BookId }, book);
         }
-        //public async Task<ActionResult<Book>> PostBook(string title, string isbn, int publicationYear, int[] authorIds)
-        //{
-        //    ICollection<Author> authors = new List<Author>();
-        //    foreach (int id in authorIds)
-        //    {
-        //        var author = await _context.Authors.FindAsync(id);
-        //        if (author == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        authors.Add(author);
-        //    }
-
-        //    Book book = new Book() { Title = title, Isbn = isbn, PublicationYear = publicationYear, Authors = authors };
-
-        //    _context.Books.Add(book);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetBook", new { id = book.Id }, book);
-        //}
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]

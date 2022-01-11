@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace LibraryDbWebApi.Models
 {
     public class Loan

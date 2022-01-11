@@ -1,13 +1,4 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LibraryDbWebApi.Data;
-using LibraryDbWebApi.Models;
 
 namespace LibraryDbWebApi.Controllers
 {
@@ -16,23 +7,14 @@ namespace LibraryDbWebApi.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly LibraryContext _context;
-        private readonly DataAccess _dataAccess;
 
         public AuthorsController(LibraryContext context)
         {
             _context = context;
-            _dataAccess = new DataAccess(_context);
         }
 
         // GET: api/Authors
         [HttpGet]
-        //public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
-        //{
-        //    List<Author> authors = (List<Author>)await _dataAccess.GetAuthors();
-        //    return authors;
-
-        //}
-
         public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
         {
             var authors = await _context.Authors.ToListAsync();
@@ -53,10 +35,10 @@ namespace LibraryDbWebApi.Controllers
             return author;
         }
 
-        [HttpGet("byfirstname/{firstName}")]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthorsByFirstName(string firstName)
+        [HttpGet("bylastname/{lastName}")]
+        public async Task<ActionResult<IEnumerable<Author>>> GetAuthorsByFirstName(string lastName)
         {
-            var author = await _context.Authors.Where(a => a.FirstName == firstName).ToListAsync();
+            var author = await _context.Authors.Where(a => a.LastName == lastName).ToListAsync();
 
             if (author == null)
             {

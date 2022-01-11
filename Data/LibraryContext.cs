@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using LibraryDbWebApi.Models;
-
+﻿
 namespace LibraryDbWebApi.Data
 {
     public class LibraryContext : DbContext
@@ -19,6 +17,5 @@ namespace LibraryDbWebApi.Data
         {
 
         }
-
     }
 }
