@@ -7,7 +7,7 @@ namespace LibraryDbWebApi.Models
         [Key]
         [Required]
         public int Id { get; set; }
-        public DateTime? LoanDate { get; set; }
+        public DateTime? LoanDate { get; set; } = DateTime.Today;
         public DateTime? ReturnDate { get; set; }
         [Required]
         public virtual Customer? Borrower { get; set; }

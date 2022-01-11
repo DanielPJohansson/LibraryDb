@@ -1,18 +1,27 @@
-﻿namespace LibraryDbWebApi.Data
+﻿using LibraryDbWebApi.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace LibraryDbWebApi.Data
 {
     public class DataAccess
     {
-        LibraryContext libraryDb = new LibraryContext(); 
+        public LibraryContext LibraryDb { get; set; }
+
+        public DataAccess(LibraryContext libraryDb)
+        {
+            LibraryDb = libraryDb;
+        }
 
         public void RecreateDatabase()
         {
-            libraryDb.Database.EnsureDeleted();
-            libraryDb.Database.EnsureCreated();
+            LibraryDb.Database.EnsureDeleted();
+            LibraryDb.Database.EnsureCreated();
         }
 
-        public IEnumerable<Author> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthors()
         {
-
+            IEnumerable<Author> authors = await LibraryDb.Authors.ToListAsync();
+            return authors;
         }
     }
 }

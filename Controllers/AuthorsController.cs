@@ -16,21 +16,30 @@ namespace LibraryDbWebApi.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly LibraryContext _context;
+        private readonly DataAccess _dataAccess;
 
         public AuthorsController(LibraryContext context)
         {
             _context = context;
+            _dataAccess = new DataAccess(_context);
         }
 
         // GET: api/Authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthors()
         {
-            return await _context.Authors.ToListAsync();
+            
+            return await _dataAccess.GetAuthors();
+
         }
 
-        //// GET: api/Authors/5
-        [HttpGet("{id}")]
+        //public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        //{
+        //    return await _context.Authors.ToListAsync();
+        //}
+
+            //// GET: api/Authors/5
+            [HttpGet("{id}")]
         public async Task<ActionResult<Author>> GetAuthor(int id)
         {
             var author = await _context.Authors.FindAsync(id);
