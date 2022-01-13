@@ -15,7 +15,7 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<GetAuthorDTO>>> GetAuthors()
         {
             var authors = await GetAuthorAsDTO().ToListAsync();
 
@@ -24,7 +24,7 @@ namespace LibraryDbWebApi.Controllers
 
         //// GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorDTO>> GetAuthor(int id)
+        public async Task<ActionResult<GetAuthorDTO>> GetAuthor(int id)
         {
             var author = await GetAuthorAsDTO().FirstOrDefaultAsync(a => a.AuthorId == id);
 
@@ -37,7 +37,7 @@ namespace LibraryDbWebApi.Controllers
         }
 
         [HttpGet("bylastname/{lastName}")]
-        public async Task<ActionResult<IEnumerable<AuthorDTO>>> GetAuthorsByFirstName(string lastName)
+        public async Task<ActionResult<IEnumerable<GetAuthorDTO>>> GetAuthorsByFirstName(string lastName)
         {
             var author = await GetAuthorAsDTO().Where(a => a.LastName == lastName).ToListAsync();
 
@@ -49,9 +49,9 @@ namespace LibraryDbWebApi.Controllers
             return author;
         }
 
-        private IQueryable<AuthorDTO> GetAuthorAsDTO()
+        private IQueryable<GetAuthorDTO> GetAuthorAsDTO()
         {
-            return _context.Authors.Select(a => new AuthorDTO()
+            return _context.Authors.Select(a => new GetAuthorDTO()
             {
                 AuthorId = a.AuthorId,
                 FirstName = a.FirstName,
@@ -95,7 +95,7 @@ namespace LibraryDbWebApi.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Author>> PostAuthor(AuthorDTO authorDTO)
+        public async Task<ActionResult<Author>> PostAuthor(PostAuthorDTO authorDTO)
         {
             Author author = new Author()
             {

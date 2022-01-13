@@ -15,7 +15,7 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Loans
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LoanDTO>>> GetLoans()
+        public async Task<ActionResult<IEnumerable<GetLoanDTO>>> GetLoans()
         {
             var loans = await GetLoanAsDTO()
                 .ToListAsync();
@@ -25,7 +25,7 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Loans/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<LoanDTO>> GetLoan(int id)
+        public async Task<ActionResult<GetLoanDTO>> GetLoan(int id)
         {
             var loan = await GetLoanAsDTO().FirstOrDefaultAsync(b => b.LoanId == id);
 
@@ -37,14 +37,15 @@ namespace LibraryDbWebApi.Controllers
             return loan;
         }
 
-        private IQueryable<LoanDTO> GetLoanAsDTO()
+        private IQueryable<GetLoanDTO> GetLoanAsDTO()
         {
-            return _context.Loans.Select(l => new LoanDTO()
+            return _context.Loans.Select(l => new GetLoanDTO()
             {
                 LoanId = l.LoanId,
                 LoanDate = l.LoanDate,
                 ReturnDate = l.ReturnDate,
                 LibraryBookId = l.LibraryBookId,
+                Book = new GetBookDTO() { BookId = l.LibraryBook.Book.BookId, Title = l.LibraryBook.Book.Title },
                 CustomerId = l.CustomerId,
                 Customer = l.Customer
             });
@@ -52,49 +53,58 @@ namespace LibraryDbWebApi.Controllers
 
         // PUT: api/Loans/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutBook(int id, Book book)
-        //{
-        //    if (id != book.BookId)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ReturnOfLoan(int id)
+        {
+            var loan = await _context.Loans.Include(l => l.LibraryBook).FirstOrDefaultAsync(l => l.LoanId == id);
 
-        //    _context.Entry(book).State = EntityState.Modified;
+            if (loan == null || loan.ReturnDate != null)
+            {
+                ModelState.AddModelError("Loan", "Loan does not exist or book has been returned.");
+                return BadRequest(ModelState);
+            }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!BookExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            loan.ReturnDate = DateTime.Now;
+            loan.LibraryBook.IsBorrowed = false;
 
-        //    return NoContent();
-        //}
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!LoanExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
 
         // POST: api/Loans
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Book>> PostLoan(int customerId, int libraryBookId)
+        public async Task<ActionResult<Loan>> PostLoan(PostLoanDTO loanDTO)
         {
-            var libraryBook = await _context.LibraryBooks.FindAsync(libraryBookId);
+            var libraryBook = await _context.LibraryBooks.FindAsync(loanDTO.LibraryBookId);
+
+            if (libraryBook == null)
+            {
+                return NotFound();
+            }
 
             if (libraryBook.IsBorrowed)
             {
                 return BadRequest();
             }
 
-            Loan loan = new Loan() { CustomerId = customerId, LibraryBookId = libraryBookId };
-            libraryBook.IsBorrowed= true;
+            Loan loan = new Loan() { CustomerId = loanDTO.CustomerId, LibraryBookId = loanDTO.LibraryBookId };
+            libraryBook.IsBorrowed = true;
             _context.Loans.Add(loan);
             await _context.SaveChangesAsync();
 

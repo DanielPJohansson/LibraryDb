@@ -14,7 +14,7 @@ namespace LibraryDbWebApi.Controllers
         }
        
         // DELETE api/<DatabaseController>/5
-        [HttpDelete]
+        [HttpPatch]
         public async Task<IActionResult> RecreateDatabase()
         {
             await _dataAccess.RecreateDatabase();

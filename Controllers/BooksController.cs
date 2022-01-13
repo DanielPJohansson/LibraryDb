@@ -15,9 +15,9 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetBookDTO>>> GetLibraryBooks()
+        public async Task<ActionResult<IEnumerable<GetBookDTO>>> GetBooks()
         {
-            var books = await GetLibraryBooksAsDTO()
+            var books = await GetBooksAsDTO()
                 .ToListAsync();
 
             return books;
@@ -25,9 +25,9 @@ namespace LibraryDbWebApi.Controllers
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetBookDTO>> GetLibraryBook(int id)
+        public async Task<ActionResult<GetBookDTO>> GetBook(int id)
         {
-            var book = await GetLibraryBooksAsDTO().FirstOrDefaultAsync(b => b.BookId == id);
+            var book = await GetBooksAsDTO().FirstOrDefaultAsync(b => b.BookId == id);
 
             if (book == null)
             {
@@ -37,19 +37,18 @@ namespace LibraryDbWebApi.Controllers
             return book;
         }
 
-        private IQueryable<GetBookDTO> GetLibraryBooksAsDTO()
+        private IQueryable<GetBookDTO> GetBooksAsDTO()
         {
-            return _context.LibraryBooks.Include(b => b.Book).ThenInclude(a => a.Authors)
-                            .Select(lb => new GetBookDTO()
+            return _context.Books.Include(a => a.Authors)
+                            .Select(b => new GetBookDTO()
                             {
-                                BookId = lb.Id,
-                                Title = lb.Book.Title,
-                                Isbn = lb.Book.Isbn,
-                                PublicationYear = lb.Book.PublicationYear,
-                                ReviewScore = lb.Book.ReviewScore,
-                                IsBorrowed = lb.IsBorrowed,
-                                Authors = lb.Book.Authors.Select(a =>
-                                new AuthorDTO()
+                                BookId = b.BookId,
+                                Title = b.Title,
+                                Isbn = b.Isbn,
+                                PublicationYear = b.PublicationYear,
+                                ReviewScore = b.ReviewScore,
+                                Authors = b.Authors.Select(a =>
+                                new GetAuthorDTO()
                                 {
                                     AuthorId = a.AuthorId,
                                     FirstName = a.FirstName,
@@ -96,6 +95,14 @@ namespace LibraryDbWebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(PostBookDTO bookDTO)
         {
+            var existingBook = await _context.Books.FirstOrDefaultAsync(b => b.Isbn == bookDTO.Isbn);
+            
+            if (existingBook != null)
+            {
+                ModelState.AddModelError("Existing book.", "Book with same ISBN already exists in database.");
+                return Conflict(ModelState.FirstOrDefault(c => c.Key == "Existing book."));
+            }
+
             Book book = new() { Title = bookDTO.Title, Isbn = bookDTO.Isbn, PublicationYear = bookDTO.PublicationYear };
 
             foreach (int id in bookDTO.AuthorIds)

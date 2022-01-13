@@ -1,11 +1,13 @@
 ﻿
-namespace LibraryDbWebApi.Data
+namespace LibraryDbWebApi.DTOs
 {
     public class PostBookDTO
     {
         [Required]
+        [MaxLength(100)]
         public string Title { get; set; }
         [Required]
+        [IsbnValidation]
         public string Isbn { get; set; }
         [Required]
         public int PublicationYear { get; set; }

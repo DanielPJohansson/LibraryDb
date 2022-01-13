@@ -7,7 +7,7 @@ namespace LibraryDbWebApi.Models
         [Required]
         public int BookId { get; set; }
         [Required]
-        [StringLength(50)]
+        [StringLength(100)]
         public string Title { get; set; }
         [Required]
         [StringLength(50)]

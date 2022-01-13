@@ -1,7 +1,7 @@
 ﻿
-namespace LibraryDbWebApi.Data
+namespace LibraryDbWebApi.DTOs
 {
-    public class AuthorDTO
+    public class GetAuthorDTO
     {
         public int AuthorId { get; set; }
         [Required]

@@ -34,42 +34,17 @@ namespace LibraryDbWebApi.Controllers
             return customer;
         }
 
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
-        {
-            if (id != customer.CustomerId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(customer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<Customer>> PostCustomer(PostCustomerDTO customerDTO)
         {
+            var customer = new Customer()
+            {
+                FirstName = customerDTO.FirstName,
+                LastName = customerDTO.LastName
+            };
+
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
 

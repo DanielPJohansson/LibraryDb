@@ -61,10 +61,10 @@ namespace LibraryDbWebApi.Data
             LibraryBook book12 = new LibraryBook() { Book = madeup, Library = library };
             LibraryBook book13 = new LibraryBook() { Book = madeup, Library = library };
 
-            Loan loan01 = new Loan() { Customer = herman, LibraryBook = book01 };
-            Loan loan02 = new Loan() { Customer = ali, LibraryBook = book10 };
-            Loan loan03 = new Loan() { Customer = herman, LibraryBook = book03 };
-            Loan loan04 = new Loan() { Customer = herman, LibraryBook = book05 };
+            Loan loan01 = new Loan() { Customer = herman, LibraryBook = book01, LoanDate = new DateTime(2022, 01, 10) };
+            Loan loan02 = new Loan() { Customer = ali, LibraryBook = book10, LoanDate = new DateTime(2021, 12, 27) };
+            Loan loan03 = new Loan() { Customer = herman, LibraryBook = book03, LoanDate = new DateTime(2022, 01, 12) };
+            Loan loan04 = new Loan() { Customer = herman, LibraryBook = book05, LoanDate = new DateTime(2021, 11, 20) };
 
             LibraryDb.Authors.Add(malcom);
             LibraryDb.Authors.Add(asne);

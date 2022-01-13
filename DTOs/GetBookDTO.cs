@@ -1,4 +1,4 @@
-﻿namespace LibraryDbWebApi.Data
+﻿namespace LibraryDbWebApi.DTOs
 {
     public class GetBookDTO
     {
@@ -6,9 +6,8 @@
         public string Title { get; set; }
         public string Isbn { get; set; }
         public int PublicationYear { get; set; }
-        public bool IsBorrowed { get; set; }
         public byte? ReviewScore { get; set; }
-        public List<AuthorDTO> Authors { get; set; } = new List<AuthorDTO>();
+        public List<GetAuthorDTO> Authors { get; set; } = new List<GetAuthorDTO>();
 
     }
 }

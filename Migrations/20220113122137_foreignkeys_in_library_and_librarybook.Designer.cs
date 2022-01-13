@@ -4,6 +4,7 @@ using LibraryDbWebApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryDbWebApi.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20220113122137_foreignkeys_in_library_and_librarybook")]
+    partial class foreignkeys_in_library_and_librarybook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace LibraryDbWebApi.Migrations
 
                     b.HasIndex("BooksBookId");
 
-                    b.ToTable("AuthorBook", (string)null);
+                    b.ToTable("AuthorBook");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Customer", b =>
@@ -60,7 +62,7 @@ namespace LibraryDbWebApi.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Author", b =>
@@ -83,7 +85,7 @@ namespace LibraryDbWebApi.Migrations
 
                     b.HasKey("AuthorId");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Book", b =>
@@ -107,12 +109,12 @@ namespace LibraryDbWebApi.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("BookId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Library", b =>
@@ -125,12 +127,11 @@ namespace LibraryDbWebApi.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LibraryId");
 
-                    b.ToTable("Libraries", (string)null);
+                    b.ToTable("Libraries");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.LibraryBook", b =>
@@ -156,7 +157,7 @@ namespace LibraryDbWebApi.Migrations
 
                     b.HasIndex("LibraryId");
 
-                    b.ToTable("LibraryBooks", (string)null);
+                    b.ToTable("LibraryBooks");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
@@ -185,7 +186,7 @@ namespace LibraryDbWebApi.Migrations
 
                     b.HasIndex("LibraryBookId");
 
-                    b.ToTable("Loans", (string)null);
+                    b.ToTable("Loans");
                 });
 
             modelBuilder.Entity("AuthorBook", b =>
