@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryDbWebApi.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20220109095357_added__relationships_corrected_access_modifier")]
-    partial class added__relationships_corrected_access_modifier
+    [Migration("20220113074502_correct_loan_rel")]
+    partial class correct_loan_rel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,26 +26,26 @@ namespace LibraryDbWebApi.Migrations
 
             modelBuilder.Entity("AuthorBook", b =>
                 {
-                    b.Property<int>("AuthorsId")
+                    b.Property<int>("AuthorsAuthorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BooksId")
+                    b.Property<int>("BooksBookId")
                         .HasColumnType("int");
 
-                    b.HasKey("AuthorsId", "BooksId");
+                    b.HasKey("AuthorsAuthorId", "BooksBookId");
 
-                    b.HasIndex("BooksId");
+                    b.HasIndex("BooksBookId");
 
                     b.ToTable("AuthorBook");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Customer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CustomerId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CustomerId"), 1L, 1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -57,18 +57,21 @@ namespace LibraryDbWebApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("LoanCardNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("CustomerId");
 
                     b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorId"), 1L, 1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -80,18 +83,18 @@ namespace LibraryDbWebApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AuthorId");
 
                     b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Book", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"), 1L, 1);
 
                     b.Property<string>("Isbn")
                         .IsRequired()
@@ -109,12 +112,29 @@ namespace LibraryDbWebApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("BookId");
 
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
+            modelBuilder.Entity("LibraryDbWebApi.Models.Library", b =>
+                {
+                    b.Property<int>("LibraryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LibraryId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LibraryId");
+
+                    b.ToTable("Libraries");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.LibraryBook", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +145,33 @@ namespace LibraryDbWebApi.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BorrowerId")
+                    b.Property<bool>("IsBorrowed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LibraryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("LibraryId");
+
+                    b.ToTable("LibraryBooks");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
+                {
+                    b.Property<int>("LoanId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LoanId"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LoanDate")
@@ -134,11 +180,11 @@ namespace LibraryDbWebApi.Migrations
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("LoanId");
 
                     b.HasIndex("BookId");
 
-                    b.HasIndex("BorrowerId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Loans");
                 });
@@ -147,18 +193,18 @@ namespace LibraryDbWebApi.Migrations
                 {
                     b.HasOne("LibraryDbWebApi.Models.Author", null)
                         .WithMany()
-                        .HasForeignKey("AuthorsId")
+                        .HasForeignKey("AuthorsAuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("LibraryDbWebApi.Models.Book", null)
                         .WithMany()
-                        .HasForeignKey("BooksId")
+                        .HasForeignKey("BooksBookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
+            modelBuilder.Entity("LibraryDbWebApi.Models.LibraryBook", b =>
                 {
                     b.HasOne("LibraryDbWebApi.Models.Book", "Book")
                         .WithMany()
@@ -166,15 +212,39 @@ namespace LibraryDbWebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LibraryDbWebApi.Customer", "Borrower")
-                        .WithMany()
-                        .HasForeignKey("BorrowerId")
+                    b.HasOne("LibraryDbWebApi.Models.Library", "Library")
+                        .WithMany("LibraryBooks")
+                        .HasForeignKey("LibraryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
 
-                    b.Navigation("Borrower");
+                    b.Navigation("Library");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
+                {
+                    b.HasOne("LibraryDbWebApi.Models.LibraryBook", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryDbWebApi.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.Library", b =>
+                {
+                    b.Navigation("LibraryBooks");
                 });
 #pragma warning restore 612, 618
         }

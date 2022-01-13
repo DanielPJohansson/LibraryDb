@@ -37,6 +37,27 @@ namespace LibraryDbWebApi.Data
             Customer herman = new Customer() { FirstName = "Elsa", LastName = "Modin" };
             Customer maja = new Customer() { FirstName = "Maja", LastName = "Sonntag" };
 
+            Library library = new Library()
+            {
+                Name = "Stadsbiblioteket",
+                LibraryBooks = new List<LibraryBook>()
+                {
+                    new LibraryBook() { Book = dogsaw},
+                    new LibraryBook() { Book = dogsaw},
+                    new LibraryBook() { Book = shock},
+                    new LibraryBook() { Book = kalahari},
+                    new LibraryBook() { Book = kalahari},
+                    new LibraryBook() { Book = groznyj},
+                    new LibraryBook() { Book = groznyj},
+                    new LibraryBook() { Book = groznyj},
+                    new LibraryBook() { Book = assassin},
+                    new LibraryBook() { Book = oryx},
+                    new LibraryBook() { Book = madeup},
+                    new LibraryBook() { Book = madeup},
+                    new LibraryBook() { Book = madeup}
+                }
+            };
+
             LibraryDb.Authors.Add(malcom);
             LibraryDb.Authors.Add(asne);
             LibraryDb.Authors.Add(lasse);
@@ -58,6 +79,8 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Customers.Add(anna);
             LibraryDb.Customers.Add(herman);
             LibraryDb.Customers.Add(maja);
+
+            LibraryDb.Libraries.Add(library);
 
             await LibraryDb.SaveChangesAsync();
             //await LibraryDb.Database.EnsureCreatedAsync();

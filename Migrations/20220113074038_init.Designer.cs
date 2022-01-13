@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LibraryDbWebApi.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20220111123628_updated_models_with_foreign_keys_corrected2")]
-    partial class updated_models_with_foreign_keys_corrected2
+    [Migration("20220113074038_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -96,9 +96,6 @@ namespace LibraryDbWebApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"), 1L, 1);
 
-                    b.Property<bool>("IsBorrowed")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Isbn")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -118,6 +115,49 @@ namespace LibraryDbWebApi.Migrations
                     b.HasKey("BookId");
 
                     b.ToTable("Books");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.Library", b =>
+                {
+                    b.Property<int>("LibraryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LibraryId"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LibraryId");
+
+                    b.ToTable("Libraries");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.LibraryBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsBorrowed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LibraryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("LibraryId");
+
+                    b.ToTable("LibraryBooks");
                 });
 
             modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
@@ -164,6 +204,25 @@ namespace LibraryDbWebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LibraryDbWebApi.Models.LibraryBook", b =>
+                {
+                    b.HasOne("LibraryDbWebApi.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LibraryDbWebApi.Models.Library", "Library")
+                        .WithMany("LibraryBooks")
+                        .HasForeignKey("LibraryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Library");
+                });
+
             modelBuilder.Entity("LibraryDbWebApi.Models.Loan", b =>
                 {
                     b.HasOne("LibraryDbWebApi.Models.Book", "Book")
@@ -181,6 +240,11 @@ namespace LibraryDbWebApi.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("LibraryDbWebApi.Models.Library", b =>
+                {
+                    b.Navigation("LibraryBooks");
                 });
 #pragma warning restore 612, 618
         }

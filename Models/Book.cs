@@ -14,8 +14,6 @@ namespace LibraryDbWebApi.Models
         public string Isbn { get; set; }
         [Required]
         public int PublicationYear { get; set; }
-        [Required]
-        public bool IsBorrowed { get; set; }
         public byte? ReviewScore { get; set; }
         public ICollection<Author> Authors { get; set; } = new List<Author>();
     }

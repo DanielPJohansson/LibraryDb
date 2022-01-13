@@ -7,6 +7,8 @@ namespace LibraryDbWebApi.Data
         public DbSet<Author> Authors { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Loan> Loans { get; set; }
+        public DbSet<Library> Libraries { get; set; }
+        public DbSet<LibraryBook> LibraryBooks { get; set; }
 
         public LibraryContext()
         {

@@ -17,43 +17,49 @@ namespace LibraryDbWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetBookDTO>>> GetBooks()
         {
-            var books = await _context.Books.Include(b => b.Authors)
-                .Select(b => new GetBookDTO()
-                {
-                    BookId = b.BookId,
-                    Title = b.Title,
-                    Isbn = b.Isbn,
-                    PublicationYear = b.PublicationYear,
-                    ReviewScore = b.ReviewScore,
-                    IsBorrowed = b.IsBorrowed,
-                    Authors = b.Authors.Select(a => 
-                    new GetAuthorDTO() 
-                    { 
-                        AuthorId = a.AuthorId, 
-                        FirstName = a.FirstName, 
-                        LastName = a.LastName 
-                    })
-                    .ToList()
-                })
+            var books = await GetBooksAsDTO()
                 .ToListAsync();
 
             return books;
+        }
+
+        private IQueryable<GetBookDTO> GetBooksAsDTO()
+        {
+            return _context.LibraryBooks.Include(b => b.Book).ThenInclude(a => a.Authors)
+                            .Select(b => new GetBookDTO()
+                            {
+                                BookId = b.Id,
+                                Title = b.Book.Title,
+                                Isbn = b.Book.Isbn,
+                                PublicationYear = b.Book.PublicationYear,
+                                ReviewScore = b.Book.ReviewScore,
+                                IsBorrowed = b.IsBorrowed,
+                                Authors = b.Book.Authors.Select(a =>
+                                new AuthorDTO()
+                                {
+                                    AuthorId = a.AuthorId,
+                                    FirstName = a.FirstName,
+                                    LastName = a.LastName
+                                })
+                                .ToList()
+                            });
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<GetBookDTO>> GetBook(int id)
         {
-            var book = await _context.Books.Include(b => b.Authors).Select(b => new GetBookDTO()
+            var book = await _context.LibraryBooks.Include(b => b.Book).ThenInclude(_a => _a.Authors)
+                .Select(b => new GetBookDTO()
             {
-                BookId = b.BookId,
-                Title = b.Title,
-                Isbn = b.Isbn,
-                PublicationYear = b.PublicationYear,
-                ReviewScore = b.ReviewScore,
-                IsBorrowed = b.IsBorrowed,
-                Authors = b.Authors.Select(a =>
-                new GetAuthorDTO()
+                    BookId = b.Id,
+                    Title = b.Book.Title,
+                    Isbn = b.Book.Isbn,
+                    PublicationYear = b.Book.PublicationYear,
+                    ReviewScore = b.Book.ReviewScore,
+                    IsBorrowed = b.IsBorrowed,
+                    Authors = b.Book.Authors.Select(a =>
+                new AuthorDTO()
                 {
                     AuthorId = a.AuthorId,
                     FirstName = a.FirstName,

@@ -1,19 +1,14 @@
-﻿
-namespace LibraryDbWebApi.Models
+﻿namespace LibraryDbWebApi.Data
 {
-    public class PostBookDTO
+    public class GetBookDTO
     {
-        [Required]
+        public int BookId { get; set; }
         public string Title { get; set; }
-        [Required]
         public string Isbn { get; set; }
-        [Required]
         public int PublicationYear { get; set; }
-        [Required]
         public bool IsBorrowed { get; set; }
-        [Required]
         public byte? ReviewScore { get; set; }
-        [Required]
-        public List<int> AuthorIds { get; set; }
+        public List<AuthorDTO> Authors { get; set; } = new List<AuthorDTO>();
+
     }
 }
