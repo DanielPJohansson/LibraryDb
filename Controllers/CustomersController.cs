@@ -39,8 +39,15 @@ namespace LibraryDbWebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(PostCustomerDTO customerDTO)
         {
+            if(_context.Customers.Any(e => e.LoanCardNumber == customerDTO.LoanCardNumber))
+            {
+                ModelState.AddModelError("LoanCardNumber", "The loan card number already exists");
+                return BadRequest(ModelState);
+            }
+
             var customer = new Customer()
             {
+                LoanCardNumber = customerDTO.LoanCardNumber,
                 FirstName = customerDTO.FirstName,
                 LastName = customerDTO.LastName
             };
@@ -65,11 +72,6 @@ namespace LibraryDbWebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.CustomerId == id);
         }
     }
 }

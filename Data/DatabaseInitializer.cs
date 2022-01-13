@@ -1,11 +1,16 @@
 ﻿
 namespace LibraryDbWebApi.Data
 {
-    public class DataAccess
+    public class DatabaseInitializer
     {
         public LibraryContext LibraryDb { get; set; }
 
-        public DataAccess(LibraryContext libraryDb)
+        public DatabaseInitializer()
+        {
+            LibraryDb = new LibraryContext();
+        }
+
+        public DatabaseInitializer(LibraryContext libraryDb)
         {
             LibraryDb = libraryDb;
         }
@@ -15,13 +20,10 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Database.EnsureDeleted();
             await RelationalDatabaseFacadeExtensions.MigrateAsync(LibraryDb.Database);
 
-            SeedDatabase();
-
-            await LibraryDb.SaveChangesAsync();
-            ////await LibraryDb.Database.EnsureCreatedAsync();
+            await SeedDatabase();
         }
 
-        private void SeedDatabase()
+        private async Task SeedDatabase()
         {
             Author malcom = new Author() { FirstName = "Malcom", LastName = "Gladwell" };
             Author asne = new Author() { FirstName = "Åsne", LastName = "Seierstad" };
@@ -108,12 +110,8 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Loans.Add(loan04);
 
             LibraryDb.Libraries.Add(library);
-        }
 
-        public async Task<IEnumerable<Author>> GetAuthors()
-        {
-            var authors = await LibraryDb.Authors.ToListAsync();
-            return authors;
+            await LibraryDb.SaveChangesAsync();
         }
     }
 }

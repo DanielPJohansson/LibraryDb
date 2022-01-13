@@ -6,18 +6,18 @@ namespace LibraryDbWebApi.Controllers
     public class DatabaseController : ControllerBase
     {
         private readonly LibraryContext _context;
-        private readonly DataAccess _dataAccess;
+        private readonly DatabaseInitializer _databaseInitializer;
         public DatabaseController(LibraryContext context)
         {
             _context = context;
-            _dataAccess = new DataAccess(_context);
+            _databaseInitializer = new DatabaseInitializer(_context);
         }
        
         // DELETE api/<DatabaseController>/5
         [HttpPatch]
         public async Task<IActionResult> RecreateDatabase()
         {
-            await _dataAccess.RecreateDatabase();
+            await _databaseInitializer.RecreateDatabase();
             return NoContent();
         }
     }

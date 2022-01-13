@@ -7,7 +7,7 @@ namespace LibraryDbWebApi
         [Required]
         public int CustomerId { get; set; }
         [Required]
-        public int LoanCardNumber { get; set; } = new Random().Next(1, 1000);
+        public int LoanCardNumber { get; set; }
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }

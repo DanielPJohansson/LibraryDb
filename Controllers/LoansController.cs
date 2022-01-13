@@ -17,8 +17,7 @@ namespace LibraryDbWebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetLoanDTO>>> GetLoans()
         {
-            var loans = await GetLoanAsDTO()
-                .ToListAsync();
+            var loans = await GetLoanAsDTO().ToListAsync();
 
             return loans;
         }
