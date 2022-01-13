@@ -9,8 +9,11 @@ namespace LibraryDbWebApi.Models
         public DateTime? LoanDate { get; set; } = DateTime.Today;
         public DateTime? ReturnDate { get; set; }
         [Required]
+        public int CustomerId { get; set; }
         public virtual Customer? Customer { get; set; }
         [Required]
-        public virtual LibraryBook? Book { get; set; }
+        public int LibraryBookId { get; set; }
+        public virtual LibraryBook? LibraryBook { get; set; }
+
     }
 }

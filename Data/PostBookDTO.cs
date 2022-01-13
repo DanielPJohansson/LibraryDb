@@ -10,8 +10,6 @@ namespace LibraryDbWebApi.Data
         [Required]
         public int PublicationYear { get; set; }
         [Required]
-        public bool IsBorrowed { get; set; }
-        [Required]
         public byte? ReviewScore { get; set; }
         [Required]
         public List<int> AuthorIds { get; set; }

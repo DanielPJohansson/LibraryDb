@@ -15,6 +15,14 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Database.EnsureDeleted();
             await RelationalDatabaseFacadeExtensions.MigrateAsync(LibraryDb.Database);
 
+            SeedDatabase();
+
+            await LibraryDb.SaveChangesAsync();
+            ////await LibraryDb.Database.EnsureCreatedAsync();
+        }
+
+        private void SeedDatabase()
+        {
             Author malcom = new Author() { FirstName = "Malcom", LastName = "Gladwell" };
             Author asne = new Author() { FirstName = "Åsne", LastName = "Seierstad" };
             Author lasse = new Author() { FirstName = "Lasse", LastName = "Berg" };
@@ -37,26 +45,26 @@ namespace LibraryDbWebApi.Data
             Customer herman = new Customer() { FirstName = "Elsa", LastName = "Modin" };
             Customer maja = new Customer() { FirstName = "Maja", LastName = "Sonntag" };
 
-            Library library = new Library()
-            {
-                Name = "Stadsbiblioteket",
-                LibraryBooks = new List<LibraryBook>()
-                {
-                    new LibraryBook() { Book = dogsaw},
-                    new LibraryBook() { Book = dogsaw},
-                    new LibraryBook() { Book = shock},
-                    new LibraryBook() { Book = kalahari},
-                    new LibraryBook() { Book = kalahari},
-                    new LibraryBook() { Book = groznyj},
-                    new LibraryBook() { Book = groznyj},
-                    new LibraryBook() { Book = groznyj},
-                    new LibraryBook() { Book = assassin},
-                    new LibraryBook() { Book = oryx},
-                    new LibraryBook() { Book = madeup},
-                    new LibraryBook() { Book = madeup},
-                    new LibraryBook() { Book = madeup}
-                }
-            };
+            Library library = new Library() { Name = "Stadsbiblioteket" };
+
+            LibraryBook book01 = new LibraryBook() { Book = dogsaw, Library = library, IsBorrowed = true };
+            LibraryBook book02 = new LibraryBook() { Book = dogsaw, Library = library };
+            LibraryBook book03 = new LibraryBook() { Book = shock, Library = library, IsBorrowed = true };
+            LibraryBook book04 = new LibraryBook() { Book = kalahari, Library = library };
+            LibraryBook book05 = new LibraryBook() { Book = kalahari, Library = library, IsBorrowed = true };
+            LibraryBook book06 = new LibraryBook() { Book = groznyj, Library = library };
+            LibraryBook book07 = new LibraryBook() { Book = groznyj, Library = library };
+            LibraryBook book08 = new LibraryBook() { Book = groznyj, Library = library };
+            LibraryBook book09 = new LibraryBook() { Book = assassin, Library = library };
+            LibraryBook book10 = new LibraryBook() { Book = oryx, Library = library, IsBorrowed = true };
+            LibraryBook book11 = new LibraryBook() { Book = madeup, Library = library };
+            LibraryBook book12 = new LibraryBook() { Book = madeup, Library = library };
+            LibraryBook book13 = new LibraryBook() { Book = madeup, Library = library };
+
+            Loan loan01 = new Loan() { Customer = herman, LibraryBook = book01 };
+            Loan loan02 = new Loan() { Customer = ali, LibraryBook = book10 };
+            Loan loan03 = new Loan() { Customer = herman, LibraryBook = book03 };
+            Loan loan04 = new Loan() { Customer = herman, LibraryBook = book05 };
 
             LibraryDb.Authors.Add(malcom);
             LibraryDb.Authors.Add(asne);
@@ -80,10 +88,26 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Customers.Add(herman);
             LibraryDb.Customers.Add(maja);
 
-            LibraryDb.Libraries.Add(library);
+            LibraryDb.LibraryBooks.Add(book01);
+            LibraryDb.LibraryBooks.Add(book02);
+            LibraryDb.LibraryBooks.Add(book03);
+            LibraryDb.LibraryBooks.Add(book04);
+            LibraryDb.LibraryBooks.Add(book05);
+            LibraryDb.LibraryBooks.Add(book06);
+            LibraryDb.LibraryBooks.Add(book07);
+            LibraryDb.LibraryBooks.Add(book08);
+            LibraryDb.LibraryBooks.Add(book09);
+            LibraryDb.LibraryBooks.Add(book10);
+            LibraryDb.LibraryBooks.Add(book11);
+            LibraryDb.LibraryBooks.Add(book12);
+            LibraryDb.LibraryBooks.Add(book13);
 
-            await LibraryDb.SaveChangesAsync();
-            //await LibraryDb.Database.EnsureCreatedAsync();
+            LibraryDb.Loans.Add(loan01);
+            LibraryDb.Loans.Add(loan02);
+            LibraryDb.Loans.Add(loan03);
+            LibraryDb.Loans.Add(loan04);
+
+            LibraryDb.Libraries.Add(library);
         }
 
         public async Task<IEnumerable<Author>> GetAuthors()
