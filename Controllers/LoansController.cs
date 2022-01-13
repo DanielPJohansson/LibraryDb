@@ -99,7 +99,8 @@ namespace LibraryDbWebApi.Controllers
 
             if (libraryBook.IsBorrowed)
             {
-                return BadRequest();
+                ModelState.AddModelError("BookNotAvailable", "Book is not available for loan.");
+                return BadRequest(ModelState);
             }
 
             Loan loan = new Loan() { CustomerId = loanDTO.CustomerId, LibraryBookId = loanDTO.LibraryBookId };

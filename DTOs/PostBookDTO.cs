@@ -9,16 +9,16 @@ namespace LibraryDbWebApi.DTOs
         private string _isbn;
         [Required]
         [IsbnValidation]
-        public string Isbn 
-        { 
+        public string Isbn
+        {
             get
             {
                 return _isbn;
-            } 
+            }
             set
             {
-                _isbn = new string(value.Where(Char.IsDigit).ToArray());
-            } 
+                _isbn = new string(value.Trim().Replace("-",""));
+            }
         }
         [Required]
         public int PublicationYear { get; set; }

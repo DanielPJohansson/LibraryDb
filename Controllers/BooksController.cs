@@ -58,38 +58,6 @@ namespace LibraryDbWebApi.Controllers
                             });
         }
 
-
-        // PUT: api/Books/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutBook(int id, Book book)
-        //{
-        //    if (id != book.BookId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(book).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!BookExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -100,7 +68,7 @@ namespace LibraryDbWebApi.Controllers
             if (existingBook != null)
             {
                 ModelState.AddModelError("Existing book.", "Book with same ISBN already exists in database.");
-                return Conflict(ModelState.FirstOrDefault(c => c.Key == "Existing book."));
+                return BadRequest(ModelState);
             }
 
             Book book = new() { Title = bookDTO.Title, Isbn = bookDTO.Isbn, PublicationYear = bookDTO.PublicationYear };
