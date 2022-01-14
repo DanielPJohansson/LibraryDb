@@ -33,19 +33,23 @@ namespace LibraryDbWebApi.Data
             Author daniel = new Author() { FirstName = "Daniel", LastName = "Persson" };
             Author ebba = new Author() { FirstName = "Ebba", LastName = "Hanson" };
             Author algot = new Author() { FirstName = "Algot", LastName = "Fanér" };
+            Author arvid = new Author() { FirstName = "Arvid", LastName = "Pamlur" };
+            Author orhan = new Author() { FirstName = "Orhan", LastName = "Pamuk" };
+            Author signe = new Author() { FirstName = "Signe", LastName = "Klason" };
+            Author irma = new Author() { FirstName = "Irma", LastName = "Berggren" };
 
-            Book dogsaw = new Book() { Title = "What the dog saw", Isbn = "9780141047980", PublicationYear = 2010, Authors = new List<Author>() { malcom } };
-            Book shock = new Book() { Title = "The shock doctrine", Isbn = "9780141024530", PublicationYear = 2007, Authors = new List<Author>() { naomi } };
-            Book kalahari = new Book() { Title = "Gryning över Kalahari", Isbn = "9789170372995", PublicationYear = 2005, Authors = new List<Author>() { lasse } };
-            Book groznyj = new Book() { Title = "Ängeln i Groznyj", Isbn = "9789100121945", PublicationYear = 2007, Authors = new List<Author>() { asne } };
-            Book assassin = new Book() { Title = "The blind assassin", Isbn = "9780385720953", PublicationYear = 2001, Authors = new List<Author>() { margaret } };
-            Book oryx = new Book() { Title = "Oryx and crake", Isbn = " 9780349004068", PublicationYear = 2003, Authors = new List<Author>() { margaret } };
-            Book madeup = new Book() { Title = "En kall fisk", Isbn = "9788714045686", PublicationYear = 2018, Authors = new List<Author>() { daniel, ebba, algot } };
+            Book dogsaw = new Book() { Title = "What the dog saw", Isbn = "9780141047980", PublicationYear = 2010, ReviewScore = 78, Authors = new List<Author>() { malcom } };
+            Book shock = new Book() { Title = "The shock doctrine", Isbn = "9780141024530", PublicationYear = 2007, ReviewScore = 69, Authors = new List<Author>() { naomi } };
+            Book kalahari = new Book() { Title = "Gryning över Kalahari", Isbn = "9789170372995", PublicationYear = 2005, ReviewScore = 75, Authors = new List<Author>() { lasse } };
+            Book groznyj = new Book() { Title = "Ängeln i Groznyj", Isbn = "9789100121945", PublicationYear = 2007, ReviewScore = 81, Authors = new List<Author>() { asne } };
+            Book assassin = new Book() { Title = "The blind assassin", Isbn = "9780385720953", PublicationYear = 2001, ReviewScore = 65, Authors = new List<Author>() { margaret } };
+            Book oryx = new Book() { Title = "Oryx and crake", Isbn = " 9780349004068", PublicationYear = 2003, ReviewScore = 87, Authors = new List<Author>() { margaret } };
+            Book madeup = new Book() { Title = "En kall fisk", Isbn = "9788714045686", PublicationYear = 2018, ReviewScore = 98, Authors = new List<Author>() { daniel, ebba, algot } };
 
-            Customer ali = new Customer() { FirstName = "Ali", LastName = "Karkehabadi" };
-            Customer anna = new Customer() { FirstName = "Anna", LastName = "Franzén" };
-            Customer herman = new Customer() { FirstName = "Elsa", LastName = "Modin" };
-            Customer maja = new Customer() { FirstName = "Maja", LastName = "Sonntag" };
+            Customer ali = new Customer() { FirstName = "Ali", LastName = "Karkehabadi", LoanCardNumber = 400786360 };
+            Customer anna = new Customer() { FirstName = "Anna", LastName = "Franzén", LoanCardNumber = 302800247 };
+            Customer herman = new Customer() { FirstName = "Elsa", LastName = "Modin", LoanCardNumber = 900432540 };
+            Customer maja = new Customer() { FirstName = "Maja", LastName = "Sonntag", LoanCardNumber = 400278036 };
 
             Library library = new Library() { Name = "Stadsbiblioteket" };
 
@@ -76,6 +80,10 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Authors.Add(daniel);
             LibraryDb.Authors.Add(ebba);
             LibraryDb.Authors.Add(algot);
+            LibraryDb.Authors.Add(arvid);
+            LibraryDb.Authors.Add(orhan);
+            LibraryDb.Authors.Add(signe);
+            LibraryDb.Authors.Add(irma);
 
             LibraryDb.Books.Add(dogsaw);
             LibraryDb.Books.Add(shock);
