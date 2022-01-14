@@ -37,9 +37,12 @@ namespace LibraryDbWebApi.Controllers
         }
 
         [HttpGet("bylastname/{lastName}")]
-        public async Task<ActionResult<IEnumerable<GetAuthorDTO>>> GetAuthorsByFirstName(string lastName)
+        public async Task<ActionResult<IEnumerable<GetAuthorDTO>>> GetAuthorByPartialLastName(string lastName)
         {
-            var author = await GetAuthorAsDTO().Where(a => a.LastName == lastName).ToListAsync();
+            var author = await GetAuthorAsDTO()
+                .Where(a => EF.Functions.Like(a.LastName, $"{lastName}%"))
+                .OrderBy(a=>a.LastName)
+                .ToListAsync();
 
             if (author == null)
             {
