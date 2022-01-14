@@ -23,8 +23,6 @@ namespace LibraryDbWebApi.DTOs
         [Required]
         public int PublicationYear { get; set; }
         [Required]
-        public byte? ReviewScore { get; set; }
-        [Required]
         public List<int> AuthorIds { get; set; }
     }
 }

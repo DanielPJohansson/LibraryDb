@@ -126,10 +126,5 @@ namespace LibraryDbWebApi.Controllers
 
             return NoContent();
         }
-
-        private bool AuthorExists(int id)
-        {
-            return _context.Authors.Any(e => e.AuthorId == id);
-        }
     }
 }

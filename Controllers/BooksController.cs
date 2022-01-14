@@ -46,7 +46,7 @@ namespace LibraryDbWebApi.Controllers
                                 Title = b.Title,
                                 Isbn = b.Isbn,
                                 PublicationYear = b.PublicationYear,
-                                ReviewScore = b.ReviewScore,
+                                ReviewScore = (byte)_context.Reviews.Where(r=>r.Book.BookId == b.BookId).Average(r => r.Score),
                                 Authors = b.Authors.Select(a =>
                                 new GetAuthorDTO()
                                 {
@@ -103,11 +103,6 @@ namespace LibraryDbWebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool BookExists(int id)
-        {
-            return _context.Books.Any(e => e.BookId == id);
         }
     }
 }

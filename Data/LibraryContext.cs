@@ -9,6 +9,7 @@ namespace LibraryDbWebApi.Data
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Library> Libraries { get; set; }
         public DbSet<LibraryBook> LibraryBooks { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         public LibraryContext()
         {

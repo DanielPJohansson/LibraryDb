@@ -38,13 +38,26 @@ namespace LibraryDbWebApi.Data
             Author signe = new Author() { FirstName = "Signe", LastName = "Klason" };
             Author irma = new Author() { FirstName = "Irma", LastName = "Berggren" };
 
-            Book dogsaw = new Book() { Title = "What the dog saw", Isbn = "9780141047980", PublicationYear = 2010, ReviewScore = 78, Authors = new List<Author>() { malcom } };
-            Book shock = new Book() { Title = "The shock doctrine", Isbn = "9780141024530", PublicationYear = 2007, ReviewScore = 69, Authors = new List<Author>() { naomi } };
-            Book kalahari = new Book() { Title = "Gryning över Kalahari", Isbn = "9789170372995", PublicationYear = 2005, ReviewScore = 75, Authors = new List<Author>() { lasse } };
-            Book groznyj = new Book() { Title = "Ängeln i Groznyj", Isbn = "9789100121945", PublicationYear = 2007, ReviewScore = 81, Authors = new List<Author>() { asne } };
-            Book assassin = new Book() { Title = "The blind assassin", Isbn = "9780385720953", PublicationYear = 2001, ReviewScore = 65, Authors = new List<Author>() { margaret } };
-            Book oryx = new Book() { Title = "Oryx and crake", Isbn = " 9780349004068", PublicationYear = 2003, ReviewScore = 87, Authors = new List<Author>() { margaret } };
-            Book madeup = new Book() { Title = "En kall fisk", Isbn = "9788714045686", PublicationYear = 2018, ReviewScore = 98, Authors = new List<Author>() { daniel, ebba, algot } };
+            Book dogsaw = new Book() { Title = "What the dog saw", Isbn = "9780141047980", PublicationYear = 2010, Authors = new List<Author>() { malcom } };
+            Book shock = new Book() { Title = "The shock doctrine", Isbn = "9780141024530", PublicationYear = 2007, Authors = new List<Author>() { naomi } };
+            Book kalahari = new Book() { Title = "Gryning över Kalahari", Isbn = "9789170372995", PublicationYear = 2005, Authors = new List<Author>() { lasse } };
+            Book groznyj = new Book() { Title = "Ängeln i Groznyj", Isbn = "9789100121945", PublicationYear = 2007, Authors = new List<Author>() { asne } };
+            Book assassin = new Book() { Title = "The blind assassin", Isbn = "9780385720953", PublicationYear = 2001, Authors = new List<Author>() { margaret } };
+            Book oryx = new Book() { Title = "Oryx and crake", Isbn = " 9780349004068", PublicationYear = 2003,  Authors = new List<Author>() { margaret } };
+            Book madeup = new Book() { Title = "En kall fisk", Isbn = "9788714045686", PublicationYear = 2018, Authors = new List<Author>() { daniel, ebba, algot } };
+
+            Review review01 = new Review() { Score = 85, Book = dogsaw };
+            Review review02 = new Review() { Score = 79, Book = dogsaw };
+            Review review03 = new Review() { Score = 69, Book = dogsaw };
+            Review review04 = new Review() { Score = 76, Book = shock };
+            Review review05 = new Review() { Score = 85, Book = shock };
+            Review review06 = new Review() { Score = 78, Book = kalahari };
+            Review review07 = new Review() { Score = 56, Book = groznyj };
+            Review review08 = new Review() { Score = 76, Book = assassin };
+            Review review09 = new Review() { Score = 86, Book = assassin };
+            Review review10 = new Review() { Score = 65, Book = oryx };
+            Review review11 = new Review() { Score = 98, Book = madeup };
+            Review review12 = new Review() { Score = 99, Book = madeup };
 
             Customer ali = new Customer() { FirstName = "Ali", LastName = "Karkehabadi", LoanCardNumber = 400786360 };
             Customer anna = new Customer() { FirstName = "Anna", LastName = "Franzén", LoanCardNumber = 302800247 };
@@ -92,6 +105,19 @@ namespace LibraryDbWebApi.Data
             LibraryDb.Books.Add(assassin);
             LibraryDb.Books.Add(oryx);
             LibraryDb.Books.Add(madeup);
+
+            LibraryDb.Reviews.Add(review01);
+            LibraryDb.Reviews.Add(review02);
+            LibraryDb.Reviews.Add(review03);
+            LibraryDb.Reviews.Add(review04);
+            LibraryDb.Reviews.Add(review05);
+            LibraryDb.Reviews.Add(review06);
+            LibraryDb.Reviews.Add(review07);
+            LibraryDb.Reviews.Add(review08);
+            LibraryDb.Reviews.Add(review09);
+            LibraryDb.Reviews.Add(review10);
+            LibraryDb.Reviews.Add(review11);
+            LibraryDb.Reviews.Add(review12);
 
             LibraryDb.Customers.Add(ali);
             LibraryDb.Customers.Add(anna);

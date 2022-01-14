@@ -1,13 +1,4 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LibraryDbWebApi.Data;
-using LibraryDbWebApi.Models;
 
 namespace LibraryDbWebApi.Controllers
 {
@@ -46,6 +37,22 @@ namespace LibraryDbWebApi.Controllers
             return book;
         }
 
+        [HttpGet("bytitle/{title}")]
+        public async Task<ActionResult<IEnumerable<GetLibraryBookDTO>>> GetBooksByPartialTitle(string title)
+        {
+            var book = await GetLibraryBooksAsDTO()
+                .Where(lb => EF.Functions.Like(lb.BookDTO.Title, $"%{title}%"))
+                .OrderBy(lb => lb.BookDTO.Title)
+                .ToListAsync();
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            return book;
+        }
+
         private IQueryable<GetLibraryBookDTO> GetLibraryBooksAsDTO()
         {
             return _context.LibraryBooks.Select(lb => new GetLibraryBookDTO()
@@ -58,7 +65,7 @@ namespace LibraryDbWebApi.Controllers
                     Title = lb.Book.Title,
                     Isbn = lb.Book.Isbn,
                     PublicationYear = lb.Book.PublicationYear,
-                    ReviewScore = lb.Book.ReviewScore,
+                    ReviewScore = (byte)_context.Reviews.Where(r => r.Book.BookId == lb.Book.BookId).Average(r => r.Score),
                     Authors = lb.Book.Authors.Select(a =>
                     new GetAuthorDTO()
                     {
@@ -107,11 +114,6 @@ namespace LibraryDbWebApi.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool LibraryBookExists(int id)
-        {
-            return _context.LibraryBooks.Any(e => e.Id == id);
         }
     }
 }
