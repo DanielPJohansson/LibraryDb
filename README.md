@@ -1,4 +1,4 @@
-# LibraryDb
+# Library database with web api
 
 A library database with an web API for CRUD operations. Can create new users, books, authors and loans.
 
